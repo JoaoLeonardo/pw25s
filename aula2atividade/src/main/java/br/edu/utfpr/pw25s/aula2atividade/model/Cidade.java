@@ -1,6 +1,9 @@
-package br.edu.utfpr.pw25s.aula2.model;
+package br.edu.utfpr.pw25s.aula2atividade.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;

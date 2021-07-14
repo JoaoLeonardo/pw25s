@@ -1,4 +1,4 @@
-package br.edu.utfpr.pw25s.aula2.model;
+package br.edu.utfpr.pw25s.aula2atividade.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
