@@ -58,6 +58,13 @@ header .row {
 }
 
 /*
+ * Customização font-awesome
+ */
+.input-group-text.fa {
+    display: flex !important;
+}
+
+/*
  * Classes próprias gerais
  */
 .bg-color-primary {
@@ -226,8 +233,8 @@ header .no-text-decor, header .no-text-decor:hover {
     max-width: max-content;
 }
 
-.main-container {
-    height: 100%;
+.fill-gold {
+    color: gold;
 }
 
 .menu-opcoes-container {

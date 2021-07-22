@@ -19,11 +19,6 @@ public class ProdutoController {
 		return "produto/list";
 	}
 
-	private void carregarCombos(Model model) {
-		/* model.addAttribute("categorias", categoriaService.findAll());
-		model.addAttribute("marcas", marcaService.findAll()); */
-	}
-
 }
 
 

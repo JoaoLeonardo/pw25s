@@ -1,4 +1,8 @@
 package br.edu.utfpr.pb.pw25s.service;
 
-public class DestaqueService {
+import br.edu.utfpr.pb.pw25s.model.Destaque;
+
+public interface DestaqueService extends CrudService<Destaque, Long>{
+
 }
+

@@ -2,8 +2,7 @@
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 
-<header
-        class="container-fluid position-sticky bg-color-primary row d-flex justify-content-center box-shadow-bottom">
+<header class="container-fluid position-sticky bg-color-primary row d-flex justify-content-center box-shadow-bottom">
 
     <!-- Título -->
     <div class="col p-2">
@@ -11,10 +10,7 @@
             <div class="mr-3 row no-m-sides">
                 <div class="divider-light m-1"></div>
                 <i class="icon-container d-flex m-1">
-                    <svg fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
-                        <path
-                                d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
-                    </svg>
+                    <div th:replace="layout/fragments/logo-box"></div>
                 </i>
                 <div class="divider-light m-1"></div>
             </div>
@@ -57,14 +53,12 @@
         <a href="#cadastro" class="hoverable-text m-1 no-text-decor">Cadastrar</a>
         <div class="divider-light m-1"></div>
         <a href="#login" class="hoverable-text m-1 no-text-decor">Entrar</a>
-        <a class="icon-container d-flex m-1 clickable" href="#carrinho">
-            <svg fill="white" class="bi bi-box-seam" viewBox="0 0 16 16">
-                <path
-                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-            </svg>
+        <a class="icon-container d-flex m-1 clickable no-text-decor" href="#carrinho">
+            <i class="fa fa-2x fa-shopping-cart text-white"></i>
         </a>
-        <div class="m-1 carrinho-contador-compras clickable"><a class="no-text-decor" href="#carrinho"
-                                                                id="carrinhoContador"></a></div>
+        <div class="m-1 carrinho-contador-compras clickable">
+            <a class="no-text-decor" href="#carrinho" id="carrinhoContador"></a>
+        </div>
     </div>
 
 </header>
