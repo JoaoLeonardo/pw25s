@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<footer class="rodape container-fluid row no-m-sides justify-content-center align-self-end">
+
+    <!-- Coluna informações institucionais -->
+    <div class="col-lg-3 col-sm-6 p-2">
+        <ul>
+            <span><b>Sobre nós</b></span>
+            <li><a class="no-text-decor" href="#pgtrabalho">Trabalhe conosco</a></li>
+            <li><a class="no-text-decor" href="#pgduvidas">Dúvidas comuns</a></li>
+            <li><a class="no-text-decor" href="#pgcomunidade">Comunidade</a></li>
+            <li><a class="no-text-decor" href="#suporte">Suporte</a></li>
+        </ul>
+    </div>
+
+    <!-- Informações gerais -->
+    <div class="col-lg-3 col-sm-6 p-2">
+        <ul>
+            <span><b>Informações gerais</b></span>
+            <li>CNPJ: XXXXX-XX</li>
+            <li>Inscrição estadual: XXXXX</li>
+            <li>E-mail: email@email.com</li>
+        </ul>
+    </div>
+
+    <!-- Informações gerais -->
+    <div class="col-lg-3 col-sm-6 p-2">
+        <ul>
+            <span><b>Fique por dentro</b></span>
+            <li><a class="no-text-decor" href="#newsletter">Newsletter</a></li>
+            <li><a class="no-text-decor" href="#feed">Feed</a></li>
+        </ul>
+    </div>
+
+    <!-- Pagamento -->
+    <div class="col-lg-3 col-sm-6 p-2">
+        <ul>
+            <span><b>Opções de pagamento</b></span>
+            <li>
+                Cartão de crédito
+                <svg width="16" height="16" fill="gold" class="bi bi-credit-card" viewBox="0 0 16 16">
+                    <path
+                            d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v1h14V4a1 1 0 0 0-1-1H2zm13 4H1v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7z"/>
+                    <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-1z"/>
+                </svg>
+            </li>
+            <li>
+                Boleto
+                <svg width="16" height="16" fill="gold" class="bi bi-upc-scan" viewBox="0 0 16 16">
+                    <path
+                            d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5zM3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-7zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7z"/>
+                </svg>
+            </li>
+            <li>
+                Transferência
+                <svg width="16" height="16" fill="gold" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>
+                </svg>
+            </li>
+            <li>
+                Pix <i width="16" height="16" class="bi bi-phone" fill="gold"></i>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Logo -->
+    <div class="d-flex m-2 bg-light rounded">
+        <div class="divider-dark m-1"></div>
+        <img class="icon-container m-1" th:src="@{css/bootstrap4/icons/icons/box-seam.svg}">
+        <div class="divider-dark m-1"></div>
+    </div>
+
+</footer>
+
+</html>
