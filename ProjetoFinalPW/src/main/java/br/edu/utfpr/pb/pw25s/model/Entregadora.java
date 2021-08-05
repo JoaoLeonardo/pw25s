@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class Destaque implements Serializable {
+@EqualsAndHashCode(of = {"id"})
+public class Entregadora implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,10 +21,7 @@ public class Destaque implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 50)
-    private String imagem;
-
-    @ManyToMany(mappedBy = "destaques")
-    public List<Homepage> homepages;
+    @Column(length = 150, nullable = false)
+    private String nome;
 
 }

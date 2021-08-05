@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,6 +29,9 @@ public class Artista {
     private String apelido;
 
     @Enumerated(EnumType.STRING)
-    private TipoArtista tipoArtista;
+    private TipoArtista tipo;
+
+    @ManyToMany(mappedBy = "diretores")
+    public List<Produto> filmesDirigidos;
 
 }

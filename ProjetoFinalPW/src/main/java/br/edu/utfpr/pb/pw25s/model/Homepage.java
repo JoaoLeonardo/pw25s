@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Destaque implements Serializable {
+public class Homepage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,10 +22,15 @@ public class Destaque implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 50)
-    private String imagem;
+    @Column(length = 1000, nullable = false)
+    private String texto;
 
-    @ManyToMany(mappedBy = "destaques")
-    public List<Homepage> homepages;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "DestaqueHomepage",
+            joinColumns= @JoinColumn(name = "homepage_id", referencedColumnName= "id"),
+            inverseJoinColumns= @JoinColumn(name = "destaque_id", referencedColumnName= "id")
+    )
+    private List<Destaque> destaques;
 
 }

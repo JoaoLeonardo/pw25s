@@ -79,6 +79,10 @@ header .row {
     background-color: #00000021;
 }
 
+.word-margin {
+    margin-right: 0.2em;
+}
+
 .no-m {
     margin: 0;
 }
@@ -285,19 +289,11 @@ header .no-text-decor, header .no-text-decor:hover {
     position: unset;
 }
 
-body .card-homepage {
-    height: 60%;
-}
-
 .produto-img {
     max-width: 200px;
     max-height: 300px;
     min-width: 200px;
     min-height: 300px;
-}
-
-.produto-pg .card {
-    display: block !important;
 }
 
 .produto-pg-img {

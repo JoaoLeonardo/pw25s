@@ -6,11 +6,11 @@
 
     <!-- Título -->
     <div class="col p-2">
-        <a class="page-title-container row no-text-decor hoverable-text" href="#home">
+        <a class="page-title-container row no-text-decor hoverable-text" th:href="@{/home}">
             <div class="mr-3 row no-m-sides">
                 <div class="divider-light m-1"></div>
                 <i class="icon-container d-flex m-1">
-                    <div th:replace="layout/fragments/logo-box"></div>
+                    <div th:replace="/layout/fragments/logo-box"></div>
                 </i>
                 <div class="divider-light m-1"></div>
             </div>
@@ -28,9 +28,10 @@
                 Filmes
             </a>
             <ul class="dropdown-menu bg-color-primary box-shadow-bottom">
-                <li><a class="dropdown-item" href="#produtos/terror">Terror</a></li>
-                <li><a class="dropdown-item" href="#produtos/comedia">Comédia</a></li>
-                <li><a class="dropdown-item" href="#produtos/cult">Cult</a></li>
+                <li th:each="genero : ${generoFilmes}">
+                    <a class="dropdown-item" th:href="@{/produto/{path}(path=${genero.path})}"
+                       th:text="${genero.descricao}"></a>
+                </li>
             </ul>
         </div>
 
