@@ -168,7 +168,7 @@ header .no-text-decor, header .no-text-decor:hover {
 
 .form-group.required .control-label:after {
     content: " *";
-    color: red;
+    color: #ff0000;
 }
 
 .width-full {
@@ -185,6 +185,10 @@ header .no-text-decor, header .no-text-decor:hover {
 
 .scroll-x {
     overflow-x: scroll;
+}
+
+.row-wrap {
+    flex-flow: row wrap
 }
 
 /*
@@ -297,18 +301,31 @@ header .no-text-decor, header .no-text-decor:hover {
 }
 
 .produto-pg-img {
-    max-height: 200px;
-    min-width: 100px;
-    min-height: 200px;
+    z-index: 1;
+    max-height: 300px;
     transition: 0.9s;
 }
 
 .produto-pg-img:hover {
-    -webkit-transform: scale(1.8);
-    -moz-transform: scale(1.8);
-    -ms-transform: scale(1.8);
-    -o-transform: scale(1.8);
-    transform: scale(1.8);
+    -webkit-transform: scale(1.3);
+    -moz-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    -o-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+.produto-img-miniature-group {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+@media(max-width: 1280px) {
+    .produto-img-miniature-group {
+        max-width: 450px;
+        flex-direction: row !important;
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
 }
 
 .produto-img-miniature {
