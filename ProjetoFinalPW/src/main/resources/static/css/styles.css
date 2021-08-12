@@ -383,7 +383,6 @@ header .no-text-decor, header .no-text-decor:hover {
 }
 
 .btn-gravar {
-    z-index: 100;
     width: 74px;
     height: 74px;
     box-shadow: 2px 2px 4px #181818ad;

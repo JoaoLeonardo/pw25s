@@ -37,8 +37,11 @@ public class Cliente implements Serializable {
     @Column(nullable = false)
     private String senha;
 
-    @Column(nullable = false)
-    private String cidade;
+    @Column()
+    private Long telefone;
+
+    @Column()
+    private Long celular;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_endereco_id", referencedColumnName = "id")

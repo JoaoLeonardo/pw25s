@@ -22,13 +22,19 @@ public class Endereco implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private Estado estado;
+
+    @Column(nullable = false)
+    private String cidade;
+
     @Column(nullable = false)
     private String bairro;
 
     @Column(nullable = false)
     private String rua;
 
-    @Column(nullable = false)
+    @Column()
     private String complemento;
 
     @Column(nullable = false)
@@ -37,7 +43,5 @@ public class Endereco implements Serializable {
     @Column(nullable = false)
     private int cep;
 
-    @Enumerated(EnumType.STRING)
-    private Estado estado;
 
 }
