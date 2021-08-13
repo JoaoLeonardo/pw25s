@@ -1,6 +1,7 @@
 package br.edu.utfpr.pb.pw25s.controller;
 
 import br.edu.utfpr.pb.pw25s.model.Cliente;
+import br.edu.utfpr.pb.pw25s.model.Endereco;
 import br.edu.utfpr.pb.pw25s.model.enumerators.Estado;
 import br.edu.utfpr.pb.pw25s.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,19 @@ public class ClienteController extends BasicController {
 
     @GetMapping("/cadastro")
     public String form(Model model) {
-        return this.abrirForm(model, new Cliente());
+        return this.abrirForm(model, new Cliente(), new Endereco());
     }
 
     @PostMapping
-    public String save(Cliente cliente, BindingResult result, Model model, RedirectAttributes attributes) {
+    public String save(
+            Cliente cliente,
+            Endereco endereco,
+            BindingResult result,
+            Model model,
+            RedirectAttributes attributes
+    ) {
         if (result.hasErrors()) {
-            return this.abrirForm(model, cliente);
+            return this.abrirForm(model, cliente, endereco);
         }
         clienteService.save(cliente);
         attributes.addFlashAttribute("sucesso",
@@ -44,17 +51,20 @@ public class ClienteController extends BasicController {
     }
 
     /**
-     * @description Retorna o template do form inserindo o cliente no model
-     * @param model Model do template
+     * @param model   Model do template
      * @param cliente Cliente que estará sendo editado
+     * @description Retorna o template do form inserindo o cliente no model
      */
-    private String abrirForm(Model model, Cliente cliente) {
+    private String abrirForm(Model model, Cliente cliente, Endereco endereco) {
         model.addAttribute("cliente", cliente);
+        model.addAttribute("endereco", endereco);
         model.addAttribute("estados", getEstados());
         return "cliente/form";
     }
 
     @ModelAttribute("estados")
-    public Estado[] getEstados() { return Estado.values(); }
+    public Estado[] getEstados() {
+        return Estado.values();
+    }
 
 }

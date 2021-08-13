@@ -10,9 +10,9 @@
 </head>
 <body>
 <section layout:fragment="conteudo">
-    <form class="width-full" th:action="@{/cliente}" method="post" th:object="${cliente}">
 
-        <!-- Dados pessoais -->
+    <!-- Dados pessoais -->
+    <form class="width-full" th:action="@{/cliente}" method="post" th:object="${cliente}">
         <div class="container card row col-12 p-3 mb-3 no-m-sides">
 
             <!-- Título -->
@@ -91,7 +91,10 @@
 
         </div>
 
-        <!-- Endereço --->
+    </form>
+
+    <!-- Endereço --->
+    <form class="width-full" th:action="@{/cliente}" method="post" th:object="${endereco}">
         <div class="container card row col-12 p-3 no-m-sides">
 
             <!-- Título -->
@@ -104,20 +107,20 @@
 
                 <!-- Cidade -->
                 <div class="col-lg-9 col-sm-12 form-group required">
-                    <label class="control-label" th:for="endereco.cidade" th:text="'Cidade'"></label>
-                    <input class="form-control" th:field="*{endereco.cidade}" placeholder="Insira o nome da cidade..."
+                    <label class="control-label" th:for="cidade" th:text="'Cidade'"></label>
+                    <input class="form-control" th:field="*{cidade}" placeholder="Insira o nome da cidade..."
                            type="text">
-                    <span th:errors="*{endereco.cidade}" class="text-danger"></span>
+                    <span th:errors="*{cidade}" class="text-danger"></span>
                 </div>
 
                 <!-- Estado -->
                 <div class="col-lg-3 col-sm-12 form-group required">
-                    <label class="control-label" th:for="endereco.estado" th:text="'Estado'"></label>
-                    <select class="form-control" th:field="*{endereco.estado}" data-placeholder="Selecione o estado..."
+                    <label class="control-label" th:for="estado" th:text="'Estado'"></label>
+                    <select class="form-control" th:field="*{estado}" data-placeholder="Selecione o estado..."
                             type="text">
                         <option th:each="opt : ${estados}" th:text="${opt.nome}" th:value="${opt.nome}"></option>
                     </select>
-                    <span th:errors="*{endereco.estado}" class="text-danger"></span>
+                    <span th:errors="*{estado}" class="text-danger"></span>
                 </div>
 
             </div>
@@ -126,18 +129,18 @@
 
                 <!-- Rua -->
                 <div class="col-lg-8 col-sm-12 form-group required">
-                    <label class="control-label" th:for="endereco.rua" th:text="'Rua'"></label>
-                    <input class="form-control" th:field="*{endereco.rua}" placeholder="Insira o nome da rua..."
+                    <label class="control-label" th:for="rua" th:text="'Rua'"></label>
+                    <input class="form-control" th:field="*{rua}" placeholder="Insira o nome da rua..."
                            type="text">
-                    <span th:errors="*{endereco.rua}" class="text-danger"></span>
+                    <span th:errors="*{rua}" class="text-danger"></span>
                 </div>
 
                 <!-- Complemento -->
                 <div class="col-lg-4 col-sm-12 form-group">
-                    <label class="control-label" th:for="endereco.complemento" th:text="'Complemento'"></label>
-                    <input class="form-control" th:field="*{endereco.complemento}" placeholder="Insira o complemento..."
+                    <label class="control-label" th:for="complemento" th:text="'Complemento'"></label>
+                    <input class="form-control" th:field="*{complemento}" placeholder="Insira o complemento..."
                            type="text">
-                    <span th:errors="*{endereco.complemento}" class="text-danger"></span>
+                    <span th:errors="*{complemento}" class="text-danger"></span>
                 </div>
 
             </div>
@@ -146,35 +149,36 @@
 
                 <!-- Número -->
                 <div class="col-lg-4 col-sm-12 form-group required">
-                    <label class="control-label" th:for="endereco.numero" th:text="'Número'"></label>
-                    <input class="form-control" th:field="*{endereco.numero}" placeholder="000" type="text">
-                    <span th:errors="*{endereco.numero}" class="text-danger"></span>
+                    <label class="control-label" th:for="numero" th:text="'Número'"></label>
+                    <input class="form-control" th:field="*{numero}" placeholder="000" type="text">
+                    <span th:errors="*{numero}" class="text-danger"></span>
                 </div>
 
                 <!-- Bairro -->
                 <div class="col-lg-4 col-sm-12 form-group required">
-                    <label class="control-label" th:for="endereco.bairro" th:text="'Bairro'"></label>
-                    <input class="form-control" th:field="*{endereco.bairro}" placeholder="Insira o nome do bairro..."
+                    <label class="control-label" th:for="bairro" th:text="'Bairro'"></label>
+                    <input class="form-control" th:field="*{bairro}" placeholder="Insira o nome do bairro..."
                            type="text">
-                    <span th:errors="*{endereco.bairro}" class="text-danger"></span>
+                    <span th:errors="*{bairro}" class="text-danger"></span>
 
                 </div>
 
                 <!-- CEP -->
                 <div class="col-lg-4 col-sm-12 form-group required">
-                    <label class="control-label" th:for="endereco.cep" th:text="'CEP'"></label>
-                    <input class="form-control" th:field="*{endereco.cep}" placeholder="00000-000" type="text">
-                    <span th:errors="*{endereco.cep}" class="text-danger"></span>
+                    <label class="control-label" th:for="cep" th:text="'CEP'"></label>
+                    <input class="form-control" th:field="*{cep}" placeholder="00000-000" type="text">
+                    <span th:errors="*{cep}" class="text-danger"></span>
                 </div>
 
             </div>
 
         </div>
 
-        <!-- Botão incluir -->
-        <div th:replace="layout/fragments/btn-gravar" th:action=""></div>
-
     </form>
+
+    <!-- Botão incluir -->
+    <div th:replace="layout/fragments/btn-gravar" th:action=""></div>
+
 </section>
 </body>
 </html>
