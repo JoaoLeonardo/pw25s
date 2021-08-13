@@ -34,14 +34,14 @@ public class Endereco implements Serializable {
     @Column(nullable = false)
     private String rua;
 
-    @Column()
+    @Column
     private String complemento;
 
     @Column(nullable = false)
-    private int numero;
+    private Long numero;
 
     @Column(nullable = false)
-    private int cep;
+    private Long cep;
 
 
 }

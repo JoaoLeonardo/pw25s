@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -32,7 +33,7 @@ public class Cliente implements Serializable {
     private String nome;
 
     @Column(nullable = false)
-    private long cpf;
+    private Long cpf;
 
     @Column(nullable = false)
     private String senha;
@@ -43,8 +44,11 @@ public class Cliente implements Serializable {
     @Column()
     private Long celular;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @Column()
+    private LocalDate dataNascimento;
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cliente_endereco_id", referencedColumnName = "id")
-    private List<Endereco> enderecos;
+    private Endereco endereco;
 
 }

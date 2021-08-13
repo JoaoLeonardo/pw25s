@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout-padrao}">
+<head>
+
+</head>
+<body>
+<section layout:fragment="conteudo">
+    <div class="container card row col-12 p-3 no-m-sides">
+
+        <div class="col-12 mb-3">
+            <h4 class="font-weight-bold mb-3">Login</h4>
+            <div class="mb-3"></div>
+            <div class="hor-divider-dark"></div>
+        </div>
+
+        <div class="d-flex flex-column align-items-center">
+            <div class="col-lg-6 col-sm-12 form-group required">
+                <label class="control-label" for="inputLogin">Login</label>
+                <input type="text" class="form-control" id="inputLogin" name="inputLogin"
+                       placeholder="Insira a indentificação..." required="true">
+            </div>
+
+            <div class="col-lg-6 col-sm-12 form-group required">
+                <label class="control-label" for="inputSenha">Senha</label>
+                <input type="password" class="form-control mb-2" id="inputSenha" name="inputSenha" required="true">
+                <a href="#">Esqueci minha senha</a>
+            </div>
+
+            <div class="col-lg-6 col-sm-12 mb-2">
+                <button class="btn btn-success" style="width: 100%">Confirmar</button>
+            </div>
+        </div>
+
+        <div class="row p-2 no-m-sides justify-content-end">
+            ${PageLogo}
+        </div>
+
+    </div>
+
+    <div class="col-12 text-align-end p-3">
+        <a href="#cadastro">Ainda não tem conta? Cadastre-se aqui!</a>
+    </div>
+</section>
+</body>
+</html>
