@@ -1,7 +1,6 @@
 package br.edu.utfpr.pb.pw25s.controller;
 
 import br.edu.utfpr.pb.pw25s.model.Cliente;
-import br.edu.utfpr.pb.pw25s.model.Endereco;
 import br.edu.utfpr.pb.pw25s.model.enumerators.Estado;
 import br.edu.utfpr.pb.pw25s.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Collections;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("cliente")
@@ -30,24 +29,23 @@ public class ClienteController extends BasicController {
 
     @GetMapping("/cadastro")
     public String form(Model model) {
-        return this.abrirForm(model, new Cliente(), new Endereco());
+        return this.abrirForm(model, new Cliente());
     }
 
     @PostMapping
     public String save(
-            Cliente cliente,
-            Endereco endereco,
+            @Valid Cliente cliente,
             BindingResult result,
             Model model,
             RedirectAttributes attributes
     ) {
         if (result.hasErrors()) {
-            return this.abrirForm(model, cliente, endereco);
+            return this.abrirForm(model, cliente);
         }
+
         clienteService.save(cliente);
-        attributes.addFlashAttribute("sucesso",
-                "Registro salvo com sucesso!");
-        return "redirect:/cliente";
+        attributes.addFlashAttribute("sucesso", "Cadastro efetuado com sucesso!");
+        return "redirect:cliente/login";
     }
 
     /**
@@ -55,9 +53,8 @@ public class ClienteController extends BasicController {
      * @param cliente Cliente que estará sendo editado
      * @description Retorna o template do form inserindo o cliente no model
      */
-    private String abrirForm(Model model, Cliente cliente, Endereco endereco) {
+    private String abrirForm(Model model, Cliente cliente) {
         model.addAttribute("cliente", cliente);
-        model.addAttribute("endereco", endereco);
         model.addAttribute("estados", getEstados());
         return "cliente/form";
     }

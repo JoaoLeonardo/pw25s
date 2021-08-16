@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -25,23 +27,28 @@ public class Endereco implements Serializable {
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
+    @NotEmpty(message = "A cidade deve ser preenchida.")
     @Column(nullable = false)
     private String cidade;
 
+    @NotEmpty(message = "O bairro deve ser preenchido.")
     @Column(nullable = false)
     private String bairro;
 
+    @NotEmpty(message = "A rua deve ser preenchida.")
     @Column(nullable = false)
     private String rua;
 
     @Column
     private String complemento;
 
+    @NotNull(message = "O número deve ser preenchido.")
     @Column(nullable = false)
     private Long numero;
 
-    @Column(nullable = false)
-    private Long cep;
+    @NotEmpty(message = "O CEP deve ser preenchido.")
+    @Column(nullable = false, length = 9)
+    private String cep;
 
 
 }

@@ -4,7 +4,7 @@ $(document).ready(function () {
 });
 
 /*
- * Adiciona as máscaras nos campos do form do usuário
+ * Adiciona as máscaras nos campos do form do cliente
  */
 function implementarMascarasFormCadastroUsuario() {
     $('#cpf').mask("000.000.000-00");
