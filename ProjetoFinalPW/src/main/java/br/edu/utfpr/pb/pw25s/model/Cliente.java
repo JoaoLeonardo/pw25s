@@ -30,7 +30,7 @@ public class Cliente implements Serializable {
 
     @NotEmpty(message = "O e-mail deve ser preenchido.")
     @Email
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @NotEmpty(message = "O nome de usuário deve ser preenchido.")
