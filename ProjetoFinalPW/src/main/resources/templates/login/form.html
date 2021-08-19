@@ -10,7 +10,7 @@
 <body>
 <section layout:fragment="conteudo">
     <form class="width-full"
-          th:action="@{/templates/cliente}" method="post" th:object="${login}">
+          th:action="@{/login}" th:method="POST">
         <div class="container card d-flex column justify-content-between col-12 p-3 no-m-sides">
 
             <!-- Título -->
@@ -24,21 +24,26 @@
 
                 <!-- Login -->
                 <div class="col-lg-6 col-sm-12 form-group required">
-                    <label class="control-label" th:for="*{email}">Login</label>
-                    <input type="text" class="form-control" th:field="*{email}"
+                    <label class="control-label" for="username">Login</label>
+                    <input type="text" class="form-control" name="username" id="username"
                            placeholder="Insira a indentificação..." required="true">
                 </div>
 
                 <!-- Senha -->
                 <div class="col-lg-6 col-sm-12 form-group required">
-                    <label class="control-label" th:for="*{senha}">Senha</label>
-                    <input type="password" class="form-control mb-2" th:field="*{senha}" required="true">
+                    <label class="control-label" for="password">Senha</label>
+                    <input type="password" class="form-control mb-2" name="password" id="password" required="true">
                     <a href="#">Esqueci minha senha</a>
                 </div>
 
                 <!-- Btn confirmar -->
                 <div class="col-lg-6 col-sm-12 mb-2">
-                    <button class="btn btn-success" style="width: 100%">Confirmar</button>
+                    <button class="btn btn-success" type="submit" style="width: 100%">Confirmar</button>
+                </div>
+
+                <!-- Alertas -->
+                <div class="text-danger" th:if="${#bools.isTrue(param.error)}">
+                    Usuário e/ou senha inválido(s)!
                 </div>
 
             </div>
@@ -54,6 +59,7 @@
         <div class="col-12 text-align-end p-3">
             <a th:href="@{/cliente/cadastro}">Ainda não tem conta? Cadastre-se aqui!</a>
         </div>
+
     </form>
 </section>
 </body>

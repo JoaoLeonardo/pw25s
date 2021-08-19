@@ -6,7 +6,7 @@
 
     <!-- Título -->
     <div class="col p-2">
-        <a class="page-title-container row no-text-decor hoverable-text" th:href="@{/home}">
+        <a class="page-title-container row no-text-decor hoverable-container" th:href="@{/home}">
             <div class="mr-3 row no-m-sides">
                 <div class="divider-light m-1"></div>
                 <i class="icon-container d-flex m-1">
@@ -14,7 +14,7 @@
                 </i>
                 <div class="divider-light m-1"></div>
             </div>
-            <h1>A Real .COMpany</h1>
+            <h1 class="hoverable-text">A Real .COMpany</h1>
         </a>
     </div>
 
@@ -50,16 +50,40 @@
     </div>
 
     <!-- Login/Carrinho -->
-    <div class="col-xl-4 col-sm-12 row p-2 justify-content-end align-items-center">
-        <a th:href="@{/cliente/cadastro}" class="hoverable-text m-1 no-text-decor">Cadastrar</a>
-        <div class="divider-light m-1"></div>
-        <a th:href="@{/login}" class="hoverable-text m-1 no-text-decor">Entrar</a>
-        <a class="icon-container d-flex m-1 clickable no-text-decor" href="#carrinho">
-            <i class="fa fa-2x fa-shopping-cart text-white"></i>
-        </a>
-        <div class="m-1 carrinho-contador-compras clickable">
-            <a class="no-text-decor" href="#carrinho" id="carrinhoContador"></a>
+    <div class="col-xl-4 col-sm-12 row p-2 justify-content-end">
+
+        <!-- Login (anônimo) -->
+        <div class="d-flex m-1 align-items-center" sec:authorize="isAnonymous()">
+            <a th:href="@{/cliente/cadastro}" class="hoverable-text mr-2 no-text-decor">Cadastrar</a>
+            <div class="divider-light mr-2"></div>
+            <a th:href="@{/login}" class="hoverable-text no-text-decor">Entrar</a>
         </div>
+
+        <!-- Login (autenticado) -->
+        <div class="d-flex m-1 align-items-center dropdown-dark" sec:authorize="isAuthenticated()">
+            <a class="dropdown text-align-center clickable dropdown-toggle no-text-decor hoverable-text" href="#"
+               aria-expanded="false" data-toggle="dropdown" aria-haspopup="true" sec:authentication="name">
+            </a>
+            <ul class="dropdown-menu bg-color-primary box-shadow-bottom">
+                <li><a class="dropdown-item" href="#">Meus dados</a></li>
+                <li><a class="dropdown-item" href="#">Configurações</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" th:href="@{/logout}"><i class="fa fa-unlink"></i> Sair</a></li>
+            </ul>
+        </div>
+
+        <!-- Carrinho -->
+        <div class="d-flex m-1 align-items-center">
+            <a class="icon-container mr-1 d-flex clickable no-text-decor" href="#carrinho">
+                <i class="fa fa-2x fa-shopping-cart text-white"></i>
+            </a>
+            <div class="m-1 carrinho-contador-compras clickable">
+                <a class="no-text-decor" href="#carrinho" id="carrinhoContador"></a>
+            </div>
+        </div>
+
     </div>
 
 </header>

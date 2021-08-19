@@ -1,10 +1,10 @@
 package br.edu.utfpr.pb.pw25s.controller;
 
 import br.edu.utfpr.pb.pw25s.model.Cliente;
-import br.edu.utfpr.pb.pw25s.model.ClienteLogin;
 import br.edu.utfpr.pb.pw25s.model.enumerators.Estado;
 import br.edu.utfpr.pb.pw25s.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.security.MessageDigest;
 
 @Controller
 @RequestMapping("cliente")
@@ -23,6 +22,9 @@ public class ClienteController extends BasicController {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping()
     public String cliente(Model model) {
@@ -47,18 +49,15 @@ public class ClienteController extends BasicController {
 
         try {
             // cria um hash da senha e da confirmação
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(cliente.getSenha().getBytes());
-            cliente.setSenha(new String(messageDigest.digest()));
-            messageDigest.update(cliente.getConfirmacaoSenha().getBytes());
-            cliente.setConfirmacaoSenha(new String(messageDigest.digest()));
+            String hashSenha = passwordEncoder.encode(cliente.getSenha());
+            cliente.setSenha(hashSenha);
+            cliente.setConfirmacaoSenha(hashSenha);
 
             // salva o registro
             clienteService.save(cliente);
             attributes.addFlashAttribute("sucesso", "Cadastro efetuado com sucesso!");
 
-            // redireciona para o login
-            model.addAttribute("login", new ClienteLogin(cliente.getEmail(), null, null));
+            // redireciona para a tela de login
             return "redirect:login";
         } catch (Exception e) {
             System.out.println(e.getMessage());

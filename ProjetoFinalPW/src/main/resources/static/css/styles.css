@@ -198,7 +198,7 @@ header .no-text-decor, header .no-text-decor:hover {
     cursor: pointer;
 }
 
-.hoverable-text:hover {
+.hoverable-container:hover .hoverable-text, .hoverable-text:hover {
     color: white;
     font-weight: 500;
     transition: 0.3s;
@@ -249,17 +249,17 @@ header .no-text-decor, header .no-text-decor:hover {
     font-size: 1.4em;
 }
 
-.menu-opcoes-container .dropdown-menu .dropdown-item {
+.menu-opcoes-container .dropdown-menu .dropdown-item, .dropdown-dark .dropdown-item {
     color: white;
 }
 
-.menu-opcoes-container .dropdown-menu .dropdown-item:hover {
+.menu-opcoes-container .dropdown-menu .dropdown-item:hover, .dropdown-dark .dropdown-item:hover {
     background-color: #181818;
     color: white;
     font-weight: 500;
 }
 
-.menu-opcoes-container .dropdown-menu .dropdown-item:focus {
+.menu-opcoes-container .dropdown-menu .dropdown-item:focus, .dropdown-dark .dropdown-item:focus {
     color: white;
     text-shadow: 4px 2px 4px #00000075;
     font-weight: 500;

@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.pw25s.controller;
 
+import br.edu.utfpr.pb.pw25s.model.Cliente;
 import br.edu.utfpr.pb.pw25s.model.Homepage;
 import br.edu.utfpr.pb.pw25s.model.Produto;
 import br.edu.utfpr.pb.pw25s.model.enumerators.GeneroFilme;
@@ -7,6 +8,7 @@ import br.edu.utfpr.pb.pw25s.repository.HomepageRepository;
 import br.edu.utfpr.pb.pw25s.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
