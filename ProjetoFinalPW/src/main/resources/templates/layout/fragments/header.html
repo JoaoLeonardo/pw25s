@@ -78,11 +78,11 @@
 
         <!-- Carrinho -->
         <div class="d-flex m-1 align-items-center">
-            <a class="icon-container mr-1 d-flex clickable no-text-decor" href="#carrinho">
+            <a class="icon-container mr-1 d-flex clickable no-text-decor" th:href="@{/compra}">
                 <i class="fa fa-2x fa-shopping-cart text-white"></i>
             </a>
             <div class="m-1 carrinho-contador-compras clickable">
-                <a class="no-text-decor" href="#carrinho" id="carrinhoContador"></a>
+                <a class="no-text-decor" th:href="@{/logout}" id="carrinhoContador"></a>
             </div>
         </div>
 

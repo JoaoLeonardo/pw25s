@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout-padrao}">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.12/jquery.mask.js"></script>
+    <script type="text/javascript" th:src="@{/js/cliente-form.js}"></script>
+</head>
+<body>
+<section layout:fragment="conteudo">
+
+    <h2>Carrinho</h2>
+
+    <div class="width-full row no-m-sides">
+
+        <!-- Produtos -->
+        <div class="container card row col-lg-8 col-sm-12 p-3 no-m-sides">
+
+            <!-- Produto -->
+            <div class="col no-m-sides no-pad-sides row border grid bg-white align-items-center"
+                 th:each="produto : ${produtosCompra}">
+
+                <!-- Imagem -->
+                <div class="p-3 d-flex col-lg-5 col-sm-12 justify-content-center align-items-center">
+                    <img class="produto-img align-self-center" th:src="@{${'/images/' + produto.imagem}}">
+                </div>
+
+                <!-- Detalhes -->
+                <div class="col-lg-7 col-sm-12 p-3">
+                    <!-- Texto -->
+                    <div class="justify-text flex-column">
+                        <div><b>Título:</b> <span th:text="${produto.titulo}"></span></div>
+                        <div class="row no-m">
+                            <b class="word-margin">Diretor:</b>
+                            <div class="word-margin" th:each="diretor,iter: ${produto.diretores}">
+                                <div th:text="${diretor.nome} + (${iter.last} ? '' : ', ')"></div>
+                            </div>
+                        </div>
+                        <div><b>Ano:</b> <span th:text="${produto.ano}"></span></div>
+                        <div><b>Sinopse:</b> <span th:text="${produto.sinopse}"></span></div>
+                        <h4 class="text-align-center m-2">R$<span th:text="${produto.valor}"></span></h4>
+                    </div>
+                    <!-- Ações -->
+                    <div class="row p-3 align-items-center justify-content-center">
+                        <button id="btnRemover" class="btn btn-secondary box-shadow mb-2" type="button">
+                            Remover
+                        </button>
+                        <div class="input-group width-unset ml-2 mb-2" title="Quantidade">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Qtde.</div>
+                            </div>
+                            <input type="text" class="form-control" id="quantidadeItemCompra"
+                                   name="quantidadeItemCompra">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Detalhes da compra -->
+        <div class="container card row col-lg-4 col-sm-12 p-3 no-m-sides">
+
+        </div>
+
+    </div>
+
+</section>
+</body>
+</html>

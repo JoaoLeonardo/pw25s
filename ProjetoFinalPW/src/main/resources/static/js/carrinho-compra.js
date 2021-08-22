@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    if (!lerCookie('carrinhoCount') && localStorage.getItem('carrinhoCompras')) {
+        // ajusta o localStorage do carrinho
+        localStorage.removeItem('carrinhoCompras');
+    }
     // inicializa a exibição do carrinho
     atualizarNumeroCarrinhoCompras();
 });
@@ -27,20 +31,51 @@ function adicionarNoCarrinho(produtoId, callerElement) {
     // seta o cookie no local storage
     localStorage.setItem('carrinhoCompras', JSON.stringify(listaItensCompras));
 
-    // ajusta a exibição do carrinhoCompras (header)
-    atualizarNumeroCarrinhoCompras(callerElement);
+    // envia para o servidor
+    let url = window.location;
+    let baseUrl = url .protocol + "//" + url.host + "/";
+
+    $.ajax({
+        type: 'POST',
+        url: baseUrl.concat('compra/adicionar-carrinho'),
+        data: {carrinhoCompras: formatarCarrinhoComprasAsCookie()},
+        success: function (result) {
+            criarCookie('carrinhoCount', JSON.parse(localStorage.getItem('carrinhoCompras')).length);
+            atualizarNumeroCarrinhoCompras(callerElement);
+        },
+        error: function (result) {
+            // TODO: sweet alert
+        }
+    });
 }
+
+/*
+ * Retorna o carrinho de compras do localStorage formatado para ser setado como cookie
+ */
+function formatarCarrinhoComprasAsCookie() {
+    let strFormatada = '';
+    let parsedCarrinhoCompras = JSON.parse(localStorage.getItem('carrinhoCompras'));
+
+    for (let i = 0; i < parsedCarrinhoCompras.length; i++) {
+        strFormatada = strFormatada.concat(
+            `p${parsedCarrinhoCompras[i].produtoId}q${parsedCarrinhoCompras[i].quantidade}.`
+        );
+    }
+
+    return strFormatada;
+}
+
 
 /*
  * Atualiza a exibição do número de produtos no carrinho
  */
 function atualizarNumeroCarrinhoCompras(flickerElement) {
     const elementCarrinho = $(document).find('#carrinhoContador');
-    const cookie = JSON.parse(localStorage.getItem('carrinhoCompras'));
+    const cookie = lerCookie('carrinhoCount');
 
-    if (cookie && cookie.length) {
+    if (cookie) {
         // atualiza o número
-        elementCarrinho.text(cookie.length);
+        elementCarrinho.text(cookie);
 
         if (flickerElement) {
             // pisca a div como feedback da alteração
