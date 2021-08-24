@@ -27,11 +27,15 @@ insert into diretores_filmes (produto_id, diretor_id) values (3, 4);
 insert into diretores_filmes (produto_id, diretor_id) values (3, 5);
 insert into diretores_filmes (produto_id, diretor_id) values (4, 6);
 
-insert into entregadora (nome) values ('Trabalho Final - João Leonardo');
+insert into fornecedor (nome) values ('Trabalho Final - João Leonardo');
 
-insert into produto_detalhe (nota, info_adicional_link, entregadora_id) values (5, 'https://en.wikipedia.org/wiki/Dr._Strangelove', 1);
+insert into frete (texto, prazo, valor_entrega) values ('Express', '2 a 4 dias úteis', 22.86);
+insert into frete (texto, prazo) values ('Grátis', '6 a 8 dias úteis');
+
+insert into produto_detalhe (nota, info_adicional_link, fornecedor_id) values (5, 'https://en.wikipedia.org/wiki/Dr._Strangelove', 1);
 insert into produto_detalhe_imagem (nome, produto_detalhe_imagem_id) values ('drstrangelove-banner.jpg', 1);
 insert into produto_detalhe_imagem (nome, produto_detalhe_imagem_id) values ('drstrangelove-banner-2.jpg', 1);
 insert into produto_detalhe_imagem (nome, produto_detalhe_imagem_id) values ('drstrangelove-banner-3.jpg', 1);
+
 
 update produto set produto_detalhe_id = 1 where id = 4;

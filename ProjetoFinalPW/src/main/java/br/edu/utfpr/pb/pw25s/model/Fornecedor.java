@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-public class Entregadora implements Serializable {
+public class Fornecedor implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

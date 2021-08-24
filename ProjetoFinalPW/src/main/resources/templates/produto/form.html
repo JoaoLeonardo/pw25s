@@ -64,9 +64,10 @@
                            th:text="${produto.produtoDetalhe.nota} + '/5'"></b>
                     </div>
                     <div class="row no-m">
-                        <i class="word-margin">Entregue por:</i>
-                        <div th:text="${produto.produtoDetalhe.entregadora.nome}"></div>
+                        <i class="word-margin">Fornecido por:</i>
+                        <div th:text="${produto.produtoDetalhe.fornecedor.nome}"></div>
                     </div>
+                    <div><i>Entregue por:</i> Trabalho Final - João Leonardo</div>
                     <div>
                         <i>Informações adicionais:</i>
                         <a th:href="${produto.produtoDetalhe.infoAdicionalLink}"

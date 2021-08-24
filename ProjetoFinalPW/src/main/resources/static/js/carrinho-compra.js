@@ -10,15 +10,16 @@ $(document).ready(function () {
 /*
  * Adiciona o produto ao carrinho
  */
-function adicionarNoCarrinho(produtoId, callerElement) {
-    let listaItensCompras = JSON.parse(localStorage.getItem('carrinhoCompras'));
+function adicionarNoCarrinho(produtoId, callerElement, quantidade, callback) {
+    var listaItensCompras = JSON.parse(localStorage.getItem('carrinhoCompras'));
 
     if (listaItensCompras && listaItensCompras.length > 0) {
         const indexIncluso = listaItensCompras.findIndex(item => item.produtoId === produtoId);
 
         if (indexIncluso != null && indexIncluso >= 0) {
             // incrementa a quantidade do produto que já havia sido incluso
-            listaItensCompras[indexIncluso].quantidade++;
+            listaItensCompras[indexIncluso].quantidade = quantidade ?
+                quantidade : listaItensCompras[indexIncluso].quantidade + 1;
         } else {
             // adiciona um novo elemento com quantidade 1
             listaItensCompras.push({produtoId: produtoId, quantidade: 1});
@@ -32,16 +33,38 @@ function adicionarNoCarrinho(produtoId, callerElement) {
     localStorage.setItem('carrinhoCompras', JSON.stringify(listaItensCompras));
 
     // envia para o servidor
+    atualizarCookieCarrinhoCompras(callerElement, callback);
+}
+
+/*
+ * Remove o produto do carrinho
+ */
+function removerItemCarrinho(produtoId, callback) {
+    const carrinhoCompras = JSON.parse(localStorage.getItem('carrinhoCompras'));
+    const itemIndex = carrinhoCompras.findIndex(item => item.produtoId === produtoId);
+
+    if (itemIndex > -1 && window.confirm('Deseja remover o item do carrinho?')) {
+        carrinhoCompras.splice(itemIndex, 1);
+        localStorage.setItem('carrinhoCompras', JSON.stringify(carrinhoCompras));
+        atualizarCookieCarrinhoCompras(null, callback);
+    }
+}
+
+/*
+ * Atualiza o cookie no servidor via ajax
+ */
+function atualizarCookieCarrinhoCompras(callerElement, callback) {
     let url = window.location;
-    let baseUrl = url .protocol + "//" + url.host + "/";
+    let baseUrl = url.protocol + "//" + url.host + "/";
 
     $.ajax({
         type: 'POST',
-        url: baseUrl.concat('compra/adicionar-carrinho'),
+        url: baseUrl.concat('compra/atualizar-carrinho'),
         data: {carrinhoCompras: formatarCarrinhoComprasAsCookie()},
         success: function (result) {
             criarCookie('carrinhoCount', JSON.parse(localStorage.getItem('carrinhoCompras')).length);
             atualizarNumeroCarrinhoCompras(callerElement);
+            if (callback) callback();
         },
         error: function (result) {
             // TODO: sweet alert
@@ -64,7 +87,6 @@ function formatarCarrinhoComprasAsCookie() {
 
     return strFormatada;
 }
-
 
 /*
  * Atualiza a exibição do número de produtos no carrinho

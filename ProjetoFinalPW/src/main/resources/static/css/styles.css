@@ -56,6 +56,9 @@ header .row {
 .carousel img {
     max-height: 600px;
 }
+.btn-no-b-radius {
+    border-radius: 0 !important;
+}
 
 /*
  * Customização font-awesome
@@ -386,6 +389,10 @@ header .no-text-decor, header .no-text-decor:hover {
     width: 74px;
     height: 74px;
     box-shadow: 2px 2px 4px #181818ad;
+}
+
+.card-compra-confirmacao-acoes {
+    max-height: 600px;
 }
 
 /*

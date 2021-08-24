@@ -29,8 +29,8 @@ public class ProdutoDetalhe implements Serializable {
     private String infoAdicionalLink;
 
     @ManyToOne
-    @JoinColumn(name = "entregadora_id", referencedColumnName = "id")
-    public Entregadora entregadora;
+    @JoinColumn(name = "fornecedor_id", referencedColumnName = "id")
+    public Fornecedor fornecedor;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "produto_detalhe_imagem_id", referencedColumnName = "id")
