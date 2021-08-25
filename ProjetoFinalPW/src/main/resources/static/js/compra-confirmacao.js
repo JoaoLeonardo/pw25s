@@ -18,14 +18,14 @@ function implementEvents() {
 function calcularTotalCompra() {
     let url = window.location;
     let baseUrl = url.protocol + "//" + url.host + "/";
-    let freteSelecionado = $('input[type=radio][name="frete"]:checked').val();
+    let freteSelecionado = $('input[type=radio][name="freteId"]:checked').val();
 
     $.ajax({
         type: 'POST',
         url: baseUrl.concat('compra/total-compra'),
         data: {freteId: freteSelecionado},
         success: function (result) {
-            $('#compraConfirmacaoValor').text('R$' + result.toFixed(2));
+            $('#compraConfirmacaoValor').text('R$' + result);
         },
         error: function (result) {
             // TODO: sweet alert

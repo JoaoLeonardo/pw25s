@@ -11,7 +11,7 @@
 <section layout:fragment="conteudo">
     <div class="d-flex flex-column width-full">
 
-        <h2>Carrinho</h2>
+        <h2>Confirmação da compra</h2>
 
         <!-- Compra -->
         <div class="width-full row no-m-sides">
@@ -24,32 +24,26 @@
 
                 <!-- Frete -->
                 <div class="col border-bottom border-dark d-flex flex-column justify-content-center">
-                    <div class="form-check" th:each="frete,iter: ${fretes}">
-                        <input class="form-check-input" type="radio" name="frete" th:checked="${iter.first}"
-                               th:id="${'frete' + frete.id}"
-                               th:value="${frete.id}">
-                        <label class="form-check-label d-flex justify-content-between" th:for="${'frete' + frete.id}">
-                            <i class="mr-1" th:text="${frete.texto}"></i>
-                            <i class="mr-1" th:text="${frete.prazo}"></i>
-                            <i class="mr-1"
-                               th:text="'R$' + (${frete.valorEntrega} ? ${frete.valorEntrega} : '0,00')"></i>
-                        </label>
-                    </div>
-                    <div class="mt-2 text-align-center"><i>Entregue por:</i> Trabalho Final - João Leonardo</div>
+                    <label class="form-check-label d-flex justify-content-between">
+                        <i class="mr-1" th:text="${frete.texto}"></i>
+                        <i class="mr-1" th:text="${frete.prazo}"></i>
+                        <i class="mr-1"
+                           th:text="'R$' + (${frete.valorEntrega} ? ${frete.valorEntrega} : '0,00')"></i>
+                    </label>
                 </div>
 
                 <!-- Valor total -->
                 <div class="col d-flex justify-content-between align-items-center border-bottom border-dark p-3">
-                    <h5 class="no-m">Valor total</h5>
+                    <h5 class="no-m">Valor final (1x)</h5>
                     <div class="d-flex flex-column text-align-end">
-                        <b id="compraConfirmacaoValor"></b>
+                        <b th:text="'R$' + ${valorFinal}"></b>
                     </div>
                 </div>
 
                 <!-- Ações -->
                 <div class="col d-flex flex-column p-3 justify-content-center bg-color-distinct-group mb-3">
                     <button class="btn btn-dark box-shadow mb-2" type="button">
-                        Confirmar
+                        Finalizar compra
                     </button>
                     <a class="mb-2 text-align-center" th:href="@{/home}">Escolher mais produtos</a>
                 </div>

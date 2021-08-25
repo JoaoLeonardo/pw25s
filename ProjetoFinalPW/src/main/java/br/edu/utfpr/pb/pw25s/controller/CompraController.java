@@ -1,5 +1,6 @@
 package br.edu.utfpr.pb.pw25s.controller;
 
+import br.edu.utfpr.pb.pw25s.model.Compra;
 import br.edu.utfpr.pb.pw25s.model.Frete;
 import br.edu.utfpr.pb.pw25s.model.ProdutoQuantidade;
 import br.edu.utfpr.pb.pw25s.service.FreteService;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +31,57 @@ public class CompraController extends BasicController {
     private FreteService freteService;
 
     @GetMapping()
-    public String login(@CookieValue("produtos") String comprasCookie, Model model) {
+    public String compra(@CookieValue("produtos") String comprasCookie, Model model) {
         if (comprasCookie != null && !comprasCookie.equals("")) {
             model.addAttribute("produtosCompra", getProdutosOfCarrinho(comprasCookie));
             model.addAttribute("fretes", getFretesDisponiveis());
-            return "carrinho/compra-confirmacao";
+            return "carrinho/compra-confirma";
         }
         // TODO: página de erro
-        return "carrinho/compra-confirmacao";
+        return "carrinho/compra-confirma";
+    }
+
+    @RequestMapping(path = "/final", method = RequestMethod.GET)
+    public String confirmarCompra(
+            @RequestParam long freteId,
+            @CookieValue("produtos") String comprasCookie,
+            Model model
+    ) {
+        if (comprasCookie != null && !comprasCookie.equals("")) {
+            model.addAttribute("produtosCompra", getProdutosOfCarrinho(comprasCookie));
+            model.addAttribute("valorFinal", calcularValorTotal(freteId, comprasCookie));
+
+            Frete freteSelecionado = freteService.findOne(freteId);
+
+            if (freteSelecionado != null) {
+                model.addAttribute("frete", freteSelecionado);
+            } else {
+                // TODO: error
+                return "carrinho/compra-confirma";
+            }
+            return "carrinho/compra-final";
+        }
+        // TODO: página de erro
+        return "carrinho/compra-confirma";
+    }
+
+    @PostMapping
+    public ResponseEntity<?> save(
+            @RequestBody @Valid CompraDto compraDto,
+            BindingResult result,
+            Model model
+    ) {
+        try {
+            if (result.hasErrors()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            compraService.save(compraDtoToCompra(compraDto));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(path = "/atualizar-carrinho")
@@ -57,35 +103,21 @@ public class CompraController extends BasicController {
             return "carrinho/compra-confirmacao :: compra-produtos";
         }
         // TODO: página de erro
-        return "carrinho/compra-confirmacao";
+        return "compra-confirma";
     }
 
     /**
-     * Calcula o total da compra com base nos produtos, quantidades e frete informados
+     * Retorna o cálculo de total da compra
      *
      * @param freteId Id do frete selecionado
-     * @return Lista dos produtos adicionados no carrinho
+     * @returns Total da compra como ResponseEntity
      */
     @RequestMapping(value = "/total-compra")
-    public  ResponseEntity<Double> getTotalCompra(
+    public ResponseEntity<Double> getTotalCompra(
             @RequestParam long freteId,
-            @CookieValue("produtos") String comprasCookie,
-            HttpServletResponse response
+            @CookieValue("produtos") String comprasCookie
     ) {
-        double totalCompra = 0;
-        List<ProdutoQuantidade> itens = getProdutosOfCarrinho(comprasCookie);
-        Optional<Frete> freteSelecionado = getFretesDisponiveis().stream()
-                .filter(item -> item.getId() == freteId).findFirst();
-
-        for (ProdutoQuantidade item : itens) {
-            totalCompra += item.getProduto().getValor() * item.getQuantidade();
-        }
-
-        if (freteSelecionado.isPresent() && freteSelecionado.get().getValorEntrega() != null) {
-            totalCompra += freteSelecionado.get().getValorEntrega();
-        }
-
-        return new ResponseEntity<Double>(totalCompra, HttpStatus.OK);
+        return new ResponseEntity<Double>(calcularValorTotal(freteId, comprasCookie), HttpStatus.OK);
     }
 
     /**
@@ -110,12 +142,63 @@ public class CompraController extends BasicController {
     }
 
     /**
+     * Calcula o total da compra com base nos produtos, quantidades e frete informados
+     *
+     * @returns Total da compra como double
+     */
+    private Double calcularValorTotal(long freteId, String comprasCookie) {
+        double totalCompra = 0;
+        List<ProdutoQuantidade> itens = getProdutosOfCarrinho(comprasCookie);
+        Optional<Frete> freteSelecionado = getFretesDisponiveis().stream()
+                .filter(item -> item.getId() == freteId).findFirst();
+
+        for (ProdutoQuantidade item : itens) {
+            totalCompra += item.getProduto().getValor() * item.getQuantidade();
+        }
+
+        if (freteSelecionado.isPresent() && freteSelecionado.get().getValorEntrega() != null) {
+            totalCompra += freteSelecionado.get().getValorEntrega();
+        }
+
+        return BigDecimal.valueOf(totalCompra).setScale(3, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    /**
      * Não filtra os registros, apenas retorna os existentes
      *
      * @return Lista dos fretes disponíveis para compra
      */
     private List<Frete> getFretesDisponiveis() {
         return freteService.findAll();
+    }
+
+    /**
+     * Transforma um CompraDTO em um objeto de compra válido
+     *
+     * @return Compra baseada no CompraDTO
+     */
+    public Compra compraDtoToCompra(CompraDto compraDto) {
+        Compra compra = new Compra();
+
+        List<CompraProduto> compraProdutos = new ArrayList<>();
+        compraDto.getCompraProdutos().forEach(cpDto -> {
+            CompraProdutoPK pk = new CompraProdutoPK();
+            pk.setCompra(compra);
+            pk.setProduto(produtoService.findOne(cpDto.getProdutoId()));
+
+            CompraProduto cp = new CompraProduto();
+            cp.setId(pk);
+            cp.setQuantidade(cpDto.getQuantidade());
+            cp.setValor(cpDto.getValor());
+            compraProdutos.add(cp);
+        });
+        compra.setFornecedor(fornecedorService.findOne(compraDto.getFornecedorId()));
+        compra.setData(LocalDate.now());
+        compra.setObservacoes(compraDto.getObservacoes());
+        compra.setNotaFiscal(compraDto.getNotaFiscal());
+        compra.setCompraProdutos(compraProdutos);
+
+        return compra;
     }
 
 }
