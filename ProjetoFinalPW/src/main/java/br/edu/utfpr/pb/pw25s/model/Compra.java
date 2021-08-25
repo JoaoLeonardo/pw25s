@@ -30,13 +30,11 @@ public class Compra implements Serializable {
     @Column(nullable = false)
     private LocalDate data;
 
+    @ManyToOne
+    @JoinColumn(name = "frete_id", referencedColumnName = "id")
+    public Frete frete;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "id.compra")
     private List<CompraProduto> compraProdutos;
-
-    public double getValorTotal() {
-        return compraProdutos.stream()
-                .map(cp -> cp.getValor() * cp.getQuantidade())
-                .mapToDouble(Double::doubleValue).sum();
-    }
 
 }

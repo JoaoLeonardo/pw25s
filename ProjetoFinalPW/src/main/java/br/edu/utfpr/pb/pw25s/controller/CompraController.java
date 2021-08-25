@@ -1,8 +1,7 @@
 package br.edu.utfpr.pb.pw25s.controller;
 
-import br.edu.utfpr.pb.pw25s.model.Compra;
-import br.edu.utfpr.pb.pw25s.model.Frete;
-import br.edu.utfpr.pb.pw25s.model.ProdutoQuantidade;
+import br.edu.utfpr.pb.pw25s.model.*;
+import br.edu.utfpr.pb.pw25s.service.CompraService;
 import br.edu.utfpr.pb.pw25s.service.FreteService;
 import br.edu.utfpr.pb.pw25s.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("compra")
 public class CompraController extends BasicController {
+
+    @Autowired
+    private CompraService compraService;
 
     @Autowired
     private ProdutoService produtoService;
@@ -67,7 +71,8 @@ public class CompraController extends BasicController {
 
     @PostMapping
     public ResponseEntity<?> save(
-            @RequestBody @Valid CompraDto compraDto,
+            @RequestParam long freteId,
+            @CookieValue("produtos") String comprasCookie,
             BindingResult result,
             Model model
     ) {
@@ -75,8 +80,9 @@ public class CompraController extends BasicController {
             if (result.hasErrors()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-
-            compraService.save(compraDtoToCompra(compraDto));
+            compraService.save(
+                    montarCompra(getProdutosOfCarrinho(comprasCookie), freteService.findOne(freteId))
+            );
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -106,12 +112,6 @@ public class CompraController extends BasicController {
         return "compra-confirma";
     }
 
-    /**
-     * Retorna o cálculo de total da compra
-     *
-     * @param freteId Id do frete selecionado
-     * @returns Total da compra como ResponseEntity
-     */
     @RequestMapping(value = "/total-compra")
     public ResponseEntity<Double> getTotalCompra(
             @RequestParam long freteId,
@@ -173,29 +173,28 @@ public class CompraController extends BasicController {
     }
 
     /**
-     * Transforma um CompraDTO em um objeto de compra válido
+     * Transforma os dados da compra em um objeto Compra
      *
-     * @return Compra baseada no CompraDTO
+     * @return Compra baseada nos produtos do carrinho e no frete selecionado
      */
-    public Compra compraDtoToCompra(CompraDto compraDto) {
+    public Compra montarCompra(List<ProdutoQuantidade> produtos, Frete frete) {
         Compra compra = new Compra();
+        List<CompraProduto> compraProdutos = new ArrayList<CompraProduto>();
 
-        List<CompraProduto> compraProdutos = new ArrayList<>();
-        compraDto.getCompraProdutos().forEach(cpDto -> {
+        produtos.forEach(itemCompra -> {
             CompraProdutoPK pk = new CompraProdutoPK();
             pk.setCompra(compra);
-            pk.setProduto(produtoService.findOne(cpDto.getProdutoId()));
+            pk.setProduto(itemCompra.getProduto());
 
             CompraProduto cp = new CompraProduto();
             cp.setId(pk);
-            cp.setQuantidade(cpDto.getQuantidade());
-            cp.setValor(cpDto.getValor());
+            cp.setQuantidade(itemCompra.getQuantidade());
+            cp.setValor(pk.getProduto().getValor() * itemCompra.getQuantidade());
             compraProdutos.add(cp);
         });
-        compra.setFornecedor(fornecedorService.findOne(compraDto.getFornecedorId()));
+
+        compra.setFrete(frete);
         compra.setData(LocalDate.now());
-        compra.setObservacoes(compraDto.getObservacoes());
-        compra.setNotaFiscal(compraDto.getNotaFiscal());
         compra.setCompraProdutos(compraProdutos);
 
         return compra;
