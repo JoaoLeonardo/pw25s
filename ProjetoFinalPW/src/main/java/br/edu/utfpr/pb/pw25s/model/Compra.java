@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Compra implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    @NotNull
     private Cliente Cliente;
 
     @Column(nullable = false)

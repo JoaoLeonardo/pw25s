@@ -55,7 +55,7 @@ public class ClienteController extends BasicController {
 
             // salva o registro
             clienteService.save(cliente);
-            attributes.addFlashAttribute("sucesso", "Cadastro efetuado com sucesso!");
+            attributes.addFlashAttribute("msgSucesso", "Cadastro efetuado com sucesso!");
 
             // redireciona para a tela de login
             return "redirect:login";

@@ -30,7 +30,11 @@ function reloadProdutos() {
         type: 'GET',
         url: baseUrl.concat('compra/carrinho-itens'),
         success: function (fragment) {
-            $("#compraProdutos").replaceWith(fragment);
+            if (+lerCookie('carrinhoCount') > 0) {
+                $("#compraProdutos").replaceWith(fragment);
+            } else {
+                window.location = '/home';
+            }
         },
         error: function (result) {
             // TODO: sweet alert

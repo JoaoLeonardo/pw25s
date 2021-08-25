@@ -56,18 +56,20 @@ function removerItemCarrinho(produtoId, callback) {
 function atualizarCookieCarrinhoCompras(callerElement, callback) {
     let url = window.location;
     let baseUrl = url.protocol + "//" + url.host + "/";
+    let parsedCarrinhoCompras = JSON.parse(localStorage.getItem('carrinhoCompras'));
 
     $.ajax({
         type: 'POST',
         url: baseUrl.concat('compra/atualizar-carrinho'),
         data: {carrinhoCompras: formatarCarrinhoComprasAsCookie()},
         success: function (result) {
-            criarCookie('carrinhoCount', JSON.parse(localStorage.getItem('carrinhoCompras')).length);
+            criarCookie('carrinhoCount', parsedCarrinhoCompras ? parsedCarrinhoCompras.length : 0);
             atualizarNumeroCarrinhoCompras(callerElement);
             if (callback) callback();
         },
-        error: function (result) {
-            // TODO: sweet alert
+        error: function (data) {
+            console.error(data);
+            Swal.fire('Erro!', 'Falha ao atualizar o carrinho de compras.', 'error');
         }
     });
 }
@@ -79,10 +81,12 @@ function formatarCarrinhoComprasAsCookie() {
     let strFormatada = '';
     let parsedCarrinhoCompras = JSON.parse(localStorage.getItem('carrinhoCompras'));
 
-    for (let i = 0; i < parsedCarrinhoCompras.length; i++) {
-        strFormatada = strFormatada.concat(
-            `p${parsedCarrinhoCompras[i].produtoId}q${parsedCarrinhoCompras[i].quantidade}.`
-        );
+    if (parsedCarrinhoCompras) {
+        for (let i = 0; i < parsedCarrinhoCompras.length; i++) {
+            strFormatada = strFormatada.concat(
+                `p${parsedCarrinhoCompras[i].produtoId}q${parsedCarrinhoCompras[i].quantidade}.`
+            );
+        }
     }
 
     return strFormatada;
@@ -112,4 +116,12 @@ function atualizarNumeroCarrinhoCompras(flickerElement) {
         // inicializa o número como 0
         elementCarrinho.text('0');
     }
+}
+
+/*
+ * Remove o produto do carrinho
+ */
+function limparCarrinho() {
+    localStorage.removeItem('carrinhoCompras');
+    atualizarCookieCarrinhoCompras(null);
 }

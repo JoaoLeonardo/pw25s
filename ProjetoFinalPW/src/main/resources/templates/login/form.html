@@ -42,7 +42,8 @@
                 </div>
 
                 <!-- Alertas -->
-                <div class="text-danger" th:if="${#bools.isTrue(param.error)}">
+                <div th:if="${msgSucesso}" th:text="${msgSucesso}" class="text-success"></div>
+                <div th:if="${#bools.isTrue(param.error)}" class="text-danger">
                     Usuário e/ou senha inválido(s)!
                 </div>
 

@@ -31,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error=bad_credentials").permitAll()
                 .and().logout().logoutSuccessUrl("/login")
                 .and().authorizeRequests()
+                .antMatchers("/compra").fullyAuthenticated()
                 .antMatchers("/**").permitAll();
     }
 

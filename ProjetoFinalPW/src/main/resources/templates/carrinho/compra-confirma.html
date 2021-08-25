@@ -16,7 +16,8 @@
         <!-- Compra -->
         <form class="width-full row no-m-sides" th:action="@{compra/final}">
             <!-- Produtos -->
-            <div th:replace="carrinho/fragments/compra-produtos :: compraProdutos(habilitado='true')"></div>
+            <div th:fragment="compra-produtos"
+                 th:replace="carrinho/fragments/compra-produtos :: compraProdutos(habilitado='true')"></div>
 
             <!-- Ações da compra -->
             <div class="container card-compra-confirmacao-acoes card row col-lg-4 col-sm-12 p-3 no-m-sides">

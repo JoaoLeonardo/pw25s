@@ -1,15 +1,16 @@
 package br.edu.utfpr.pb.pw25s.controller;
 
 import br.edu.utfpr.pb.pw25s.model.*;
+import br.edu.utfpr.pb.pw25s.model.enumerators.CompraEstado;
 import br.edu.utfpr.pb.pw25s.service.CompraService;
 import br.edu.utfpr.pb.pw25s.service.FreteService;
 import br.edu.utfpr.pb.pw25s.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -36,50 +37,62 @@ public class CompraController extends BasicController {
 
     @GetMapping()
     public String compra(@CookieValue("produtos") String comprasCookie, Model model) {
-        if (comprasCookie != null && !comprasCookie.equals("")) {
-            model.addAttribute("produtosCompra", getProdutosOfCarrinho(comprasCookie));
-            model.addAttribute("fretes", getFretesDisponiveis());
-            return "carrinho/compra-confirma";
+        CompraEstado statusCompra = ValidarOperacaoCompra(comprasCookie);
+
+        switch (statusCompra) {
+            case VALIDA:
+                model.addAttribute("produtosCompra", getProdutosOfCarrinho(comprasCookie));
+                model.addAttribute("fretes", getFretesDisponiveis());
+                return "carrinho/compra-confirma";
+            case SEM_CARRINHO:
+                model.addAttribute("msgErro", "Seu carrinho está vazio!");
+                return "layout/layout-erro";
         }
-        // TODO: página de erro
-        return "carrinho/compra-confirma";
+
+        model.addAttribute("msgErro", "404. Nada encontrado!");
+        return "layout/layout-erro";
     }
 
     @RequestMapping(path = "/final", method = RequestMethod.GET)
     public String confirmarCompra(
             @RequestParam long freteId,
             @CookieValue("produtos") String comprasCookie,
+            HttpServletResponse response,
             Model model
     ) {
-        if (comprasCookie != null && !comprasCookie.equals("")) {
-            model.addAttribute("produtosCompra", getProdutosOfCarrinho(comprasCookie));
-            model.addAttribute("valorFinal", calcularValorTotal(freteId, comprasCookie));
+        CompraEstado statusCompra = ValidarOperacaoCompra(comprasCookie);
 
-            Frete freteSelecionado = freteService.findOne(freteId);
+        switch (statusCompra) {
+            case VALIDA:
+                model.addAttribute("produtosCompra", getProdutosOfCarrinho(comprasCookie));
+                model.addAttribute("valorFinal", calcularValorTotal(freteId, comprasCookie));
 
-            if (freteSelecionado != null) {
-                model.addAttribute("frete", freteSelecionado);
-            } else {
-                // TODO: error
-                return "carrinho/compra-confirma";
-            }
-            return "carrinho/compra-final";
+                Frete freteSelecionado = freteService.findOne(freteId);
+
+                if (freteSelecionado != null) {
+                    model.addAttribute("frete", freteSelecionado);
+                } else {
+                    model.addAttribute("msgErro", "Não foi possível resgatar o frete!");
+                    return "layout/layout-erro";
+                }
+
+                return "carrinho/compra-final";
+            case SEM_CARRINHO:
+                model.addAttribute("msgErro", "Seu carrinho está vazio!");
+                return "layout/layout-erro";
         }
-        // TODO: página de erro
-        return "carrinho/compra-confirma";
+
+        model.addAttribute("msgErro", "404. Nada encontrado!");
+        return "layout/layout-erro";
     }
 
     @PostMapping
     public ResponseEntity<?> save(
             @RequestParam long freteId,
             @CookieValue("produtos") String comprasCookie,
-            BindingResult result,
             Model model
     ) {
         try {
-            if (result.hasErrors()) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
             compraService.save(
                     montarCompra(getProdutosOfCarrinho(comprasCookie), freteService.findOne(freteId))
             );
@@ -104,12 +117,19 @@ public class CompraController extends BasicController {
 
     @RequestMapping(value = "/carrinho-itens", method = RequestMethod.GET)
     public String getCarrinhoItens(@CookieValue("produtos") String comprasCookie, Model model) {
-        if (comprasCookie != null && !comprasCookie.equals("")) {
-            model.addAttribute("produtosCompra", getProdutosOfCarrinho(comprasCookie));
-            return "carrinho/compra-confirmacao :: compra-produtos";
+        CompraEstado statusCompra = ValidarOperacaoCompra(comprasCookie);
+
+        switch (statusCompra) {
+            case VALIDA:
+                model.addAttribute("produtosCompra", getProdutosOfCarrinho(comprasCookie));
+                return "carrinho/compra-confirma :: compra-produtos";
+            case SEM_CARRINHO:
+                model.addAttribute("msgErro", "Seu carrinho está vazio!");
+                return "layout/layout-erro";
         }
-        // TODO: página de erro
-        return "compra-confirma";
+
+        model.addAttribute("msgErro", "404. Nada encontrado!");
+        return "layout/layout-erro";
     }
 
     @RequestMapping(value = "/total-compra")
@@ -185,6 +205,7 @@ public class CompraController extends BasicController {
             CompraProdutoPK pk = new CompraProdutoPK();
             pk.setCompra(compra);
             pk.setProduto(itemCompra.getProduto());
+            // TODO: cliente
 
             CompraProduto cp = new CompraProduto();
             cp.setId(pk);
@@ -193,11 +214,23 @@ public class CompraController extends BasicController {
             compraProdutos.add(cp);
         });
 
+        compra.setCliente((Cliente)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         compra.setFrete(frete);
         compra.setData(LocalDate.now());
         compra.setCompraProdutos(compraProdutos);
 
         return compra;
+    }
+
+    /**
+     * Valida os cookies para indentificar as operações válidas dentro da compra
+     *
+     * @returns VALIDA (sem erro) se a operação pode prosseguir
+     */
+    private CompraEstado ValidarOperacaoCompra(String comprasCookie) {
+        return (!comprasCookie.isEmpty() && !comprasCookie.isBlank() && comprasCookie.length() >= 4) ?
+                CompraEstado.VALIDA :
+                CompraEstado.SEM_CARRINHO;
     }
 
 }
