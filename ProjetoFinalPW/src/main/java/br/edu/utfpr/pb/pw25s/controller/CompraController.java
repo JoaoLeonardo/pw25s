@@ -205,7 +205,6 @@ public class CompraController extends BasicController {
             CompraProdutoPK pk = new CompraProdutoPK();
             pk.setCompra(compra);
             pk.setProduto(itemCompra.getProduto());
-            // TODO: cliente
 
             CompraProduto cp = new CompraProduto();
             cp.setId(pk);

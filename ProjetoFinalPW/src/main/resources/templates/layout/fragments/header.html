@@ -44,8 +44,10 @@
                 Serviços
             </a>
             <ul class="dropdown-menu bg-color-primary box-shadow-bottom">
-                <li><a class="dropdown-item" href="#strvideo">Streaming vídeo</a></li>
-                <li><a class="dropdown-item" href="#straudio">Streaming aúdio</a></li>
+                <li><a class="dropdown-item">Streaming vídeo <span class="badge bg-warning">TBD</span></a>
+                </li>
+                <li><a class="dropdown-item">Streaming aúdio <span class="badge bg-warning">TBD</span></a>
+                </li>
             </ul>
         </div>
 
@@ -67,8 +69,7 @@
                aria-expanded="false" data-toggle="dropdown" aria-haspopup="true" sec:authentication="name">
             </a>
             <ul class="dropdown-menu bg-color-primary box-shadow-bottom">
-                <li><a class="dropdown-item" href="#">Meus dados</a></li>
-                <li><a class="dropdown-item" href="#">Configurações</a></li>
+                <li><a class="dropdown-item" th:href="@{/cliente/meus-pedidos}">Meus pedidos</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>

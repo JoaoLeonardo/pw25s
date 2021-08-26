@@ -1,9 +1,12 @@
 package br.edu.utfpr.pb.pw25s.controller;
 
 import br.edu.utfpr.pb.pw25s.model.Cliente;
+import br.edu.utfpr.pb.pw25s.model.Compra;
 import br.edu.utfpr.pb.pw25s.model.enumerators.Estado;
+import br.edu.utfpr.pb.pw25s.repository.CompraRepository;
 import br.edu.utfpr.pb.pw25s.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("cliente")
@@ -22,6 +27,9 @@ public class ClienteController extends BasicController {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private CompraRepository compraRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -34,6 +42,20 @@ public class ClienteController extends BasicController {
     @GetMapping("/cadastro")
     public String form(Model model) {
         return this.abrirForm(model, new Cliente());
+    }
+
+    @GetMapping("/meus-pedidos")
+    public String meusPedidos(Model model) {
+        Cliente logado = (Cliente) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<List<Compra>> comprasCliente = compraRepository.findComprasByClienteIdOrderByIdDesc(logado.getId());
+
+        if (comprasCliente.isPresent() && comprasCliente.get().size() > 0) {
+            model.addAttribute("compras", comprasCliente.get());
+            return "cliente/list-pedidos";
+        }
+
+        model.addAttribute("msgErro", "Nenhum pedido encontrado!");
+        return "layout/layout-erro";
     }
 
     @PostMapping

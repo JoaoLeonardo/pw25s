@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class Compra implements Serializable {
     @ManyToOne
     @JoinColumn(name = "cliente_id", referencedColumnName = "id")
     @NotNull
-    private Cliente Cliente;
+    private Cliente cliente;
 
     @Column(nullable = false)
     private LocalDate data;
@@ -38,5 +40,18 @@ public class Compra implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "id.compra")
     private List<CompraProduto> compraProdutos;
+
+    public Double getValorTotal() {
+        double total = 0;
+
+        for (CompraProduto item : compraProdutos) {
+            total += item.getQuantidade() * item.getValor();
+        }
+        if (frete.getValorEntrega() != null) {
+            total += frete.getValorEntrega();
+        }
+
+        return BigDecimal.valueOf(total).setScale(3, RoundingMode.HALF_UP).doubleValue();
+    }
 
 }
