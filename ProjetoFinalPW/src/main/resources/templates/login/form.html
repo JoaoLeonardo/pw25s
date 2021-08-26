@@ -25,7 +25,7 @@
                 <!-- Login -->
                 <div class="col-lg-6 col-sm-12 form-group required">
                     <label class="control-label" for="username">Login</label>
-                    <input type="text" class="form-control" name="username" id="username"
+                    <input type="email" class="form-control" name="username" id="username"
                            placeholder="Insira a indentificação..." required="true">
                 </div>
 
@@ -33,7 +33,7 @@
                 <div class="col-lg-6 col-sm-12 form-group required">
                     <label class="control-label" for="password">Senha</label>
                     <input type="password" class="form-control mb-2" name="password" id="password" required="true">
-                    <a href="#">Esqueci minha senha</a>
+                    <a th:href="@{/login/recuperar-senha}">Esqueci minha senha</a>
                 </div>
 
                 <!-- Btn confirmar -->

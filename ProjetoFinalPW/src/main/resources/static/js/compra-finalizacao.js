@@ -25,8 +25,7 @@ function finalizarCompra() {
                     limparCarrinho();
                 }
             );
-        },
-        error: function (data) {
+        }, error: function (data) {
             console.error(data);
             Swal.fire('Erro!', 'Falha ao finalizar a compra.', 'error');
         }

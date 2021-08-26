@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    // inicializa a imagem principal
+    // inicializa as máscaras do form
     implementarMascarasFormCadastroUsuario();
 });
 

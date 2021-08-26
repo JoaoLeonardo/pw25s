@@ -35,9 +35,9 @@ function reloadProdutos() {
             } else {
                 window.location = '/home';
             }
-        },
-        error: function (result) {
-            // TODO: sweet alert
+        }, error: function (data) {
+            console.error(data);
+            Swal.fire('Erro!', 'Falha ao finalizar ao recarregar os produtos.', 'error');
         }
     });
 }

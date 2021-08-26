@@ -16,6 +16,7 @@
         <!-- Pedidos -->
         <div class="container card row col-12 p-3 mb-3 no-m-sides">
 
+            <!-- Pedido por id -->
             <div class="accordion" id="accordionPedidos">
                 <div class="card" th:each="pedido : ${compras}">
                     <div class="card-header" th:id="${'header' + pedido.id}">
@@ -28,6 +29,7 @@
                         </h2>
                     </div>
 
+                    <!-- Produtos -->
                     <div th:id="${'collapse' + pedido.id}" class="collapse"
                          th:aria-labelledby="${'header' + pedido.id}"
                          data-parent="#accordionPedidos">

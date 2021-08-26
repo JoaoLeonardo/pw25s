@@ -76,7 +76,7 @@
             <!-- E-mail -->
             <div class="col-12 form-group required">
                 <label class="control-label" th:for="email" th:text="'E-mail'"></label>
-                <input class="form-control" th:field="*{email}" placeholder="exemplo@email.com" type="text"
+                <input class="form-control" th:field="*{email}" placeholder="exemplo@email.com" type="email"
                        required="required">
                 <span th:errors="*{email}" class="text-danger"></span>
             </div>

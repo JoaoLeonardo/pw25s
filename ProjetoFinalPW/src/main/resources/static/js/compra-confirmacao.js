@@ -26,9 +26,9 @@ function calcularTotalCompra() {
         data: {freteId: freteSelecionado},
         success: function (result) {
             $('#compraConfirmacaoValor').text('R$' + result);
-        },
-        error: function (result) {
-            // TODO: sweet alert
+        }, error: function (data) {
+            console.error(data);
+            Swal.fire('Erro!', 'Não foi possível atualizar o valor total da compra.', 'error');
         }
     });
 }
