@@ -22,7 +22,8 @@
             <div class="card container col-lg-9 col-sm-12 p-3">
 
                 <!-- Imagens -->
-                <div class="d-flex justify-content-center p-3 row-wrap">
+                <div class="d-flex justify-content-center p-3 row-wrap border-bottom"
+                     th:if="${produto.produtoDetalhe}">
 
                     <!-- Lista de imagens -->
                     <div th:id="dvImgListaContainer" class="d-flex flex-column p-3 m-2 produto-img-miniature-group">
@@ -82,30 +83,9 @@
                 <form class="d-flex flex-column height-full no-m-sides"
                       method="post">
 
-                    <!-- Frete -->
-                    <div class="d-flex flex-column align-items-center height-full width-full pb-3">
-                        <div class="input-group p-3 width-unset">
-                            <div class="input-group-prepend" title="Cep">
-                                <div class="input-group-text">CEP</div>
-                            </div>
-                            <input type="text" class="form-control produto-pg-form-cep mr-2" id="cepEntregaProduto"
-                                   name="cepEntregaProduto" placeholder="00000-000" maxlength="9">
-                        </div>
-
-                        <span class="p-3" id="spValorFrete">Frete: </span>
-
-                        <div class="d-flex justify-content-center">
-                            <button class="btn btn-secondary box-shadow" type="button" id="calcFreteBtn">
-                                Calcular frete
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Botão dialog prestações -->
-                    <div class="p-3 d-flex justify-content-center height-full width-full align-items-center border-top border-bottom border-dark">
-                        <button class="btn btn-secondary box-shadow" type="button" data-toggle="modal"
-                                data-target="#modalPrestacoes">Prestações
-                        </button>
+                    <!-- Capa -->
+                    <div class="p-3 d-flex col-12 justify-content-center height-half">
+                        <img class="produto-img align-self-center" th:src="@{${'/images/' + produto.imagem}}">
                     </div>
 
                     <!-- Botão comprar -->

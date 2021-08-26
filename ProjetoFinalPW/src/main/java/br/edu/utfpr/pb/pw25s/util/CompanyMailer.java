@@ -3,6 +3,8 @@ package br.edu.utfpr.pb.pw25s.util;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class CompanyMailer {
@@ -29,17 +31,26 @@ public class CompanyMailer {
 
     private JavaMailSenderImpl getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
 
-        mailSender.setUsername("arealdotcompany@gmail.com");
-        mailSender.setPassword("pgUgT2yVq3cxgZ3");
+        // resources/mail.properties é ignorado pelo git!
+        try (InputStream input = new FileInputStream("resources/mail.properties")) {
+            mailSender.setHost("smtp.gmail.com");
+            mailSender.setPort(587);
 
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
+            Properties mailProp = new Properties();
+            mailProp.load(input);
+
+            mailSender.setUsername(mailProp.getProperty("endereco"));
+            mailSender.setPassword(mailProp.getProperty("senha"));
+
+            Properties props = mailSender.getJavaMailProperties();
+            props.put("mail.transport.protocol", "smtp");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.debug", "true");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         return mailSender;
     }

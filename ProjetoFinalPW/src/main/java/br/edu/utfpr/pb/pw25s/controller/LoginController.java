@@ -12,7 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -54,7 +57,7 @@ public class LoginController extends BasicController {
             senhaResetTokenService.createResetSenhaToken(cliente.get(), token);
             CompanyMailer mailer = new CompanyMailer();
             String baseUrl = String.format(
-                    "%s:/%s:%d", request.getScheme(), request.getServerName(), request.getServerPort()
+                    "%s://%s:%d", request.getScheme(), request.getServerName(), request.getServerPort()
             );
 
             mailer.enviarEmail(mailer.montarEmailRecuperacaoSenha(baseUrl, token, clienteEmail));
@@ -65,31 +68,54 @@ public class LoginController extends BasicController {
 
     @GetMapping("trocar-senha")
     public String trocarSenha(@RequestParam("token") String token, Model model) {
-        SenhaResetToken resetToken = senhaResetTokenService.validarSenhaResetToken(token);
+        if (model.getAttribute("trocaSenha") == null) {
+            SenhaResetToken resetToken = senhaResetTokenService.validarSenhaResetToken(token);
 
-        if (resetToken != null) {
-            SenhaTrocaDto dto = new SenhaTrocaDto();
-            dto.setToken(token);
-            model.addAttribute("trocaSenha", dto);
-            return "login/trocar-senha";
+            if (resetToken != null) {
+                SenhaTrocaDto dto = new SenhaTrocaDto();
+                dto.setToken(token);
+                model.addAttribute("trocaSenha", dto);
+                return "login/trocar-senha";
+            } else {
+                model.addAttribute("msgErro", "Token inválido!");
+                return "layout/layout-erro";
+            }
         }
 
-        model.addAttribute("msgErro", "Token inválido!");
-        return "layout/layout-erro";
+        return "login/trocar-senha";
     }
 
     @RequestMapping(path = "/trocar-senha", method = RequestMethod.POST)
-    public ResponseEntity<String> trocarSenhaPost(@Valid SenhaTrocaDto trocaSenha) {
-        // TODO: Corrigir retorno para não limpar a tela, IDÉIA (Redirecionar para login/mesma página)
+    public String trocarSenhaPost(
+            SenhaTrocaDto trocaSenha,
+            Model model,
+            RedirectAttributes attributes
+    ) {
+        if (!trocaSenha.getSenha().equals(trocaSenha.getConfirmacaoSenha())) {
+            model.addAttribute("msgErro", "As senhas não coincidem!");
+            return trocarSenha(trocaSenha.getToken(), model);
+        }
+
         SenhaResetToken token = senhaResetTokenService.validarSenhaResetToken(trocaSenha.getToken());
 
         if (token != null) {
-            Cliente cliente = token.getCliente();
-            clienteService.resetSenha(cliente, trocaSenha.getSenha());
-            return new ResponseEntity<String>("Atualização concluída!", HttpStatus.OK);
+            try {
+                Cliente cliente = token.getCliente();
+                clienteService.resetSenha(cliente, trocaSenha.getSenha());
+
+                // redireciona para a tela de login
+                attributes.addFlashAttribute("msgSucesso", "A senha foi atualizada com sucesso!");
+                return "redirect:/login";
+            } catch (Exception e) {
+                model.addAttribute("msgErro", "Não foi possível concluir a operação!");
+                model.addAttribute("trocaSenha", trocaSenha);
+                return trocarSenha(trocaSenha.getToken(), model);
+            }
         }
 
-        return new ResponseEntity<String>("Token inválido!", HttpStatus.INTERNAL_SERVER_ERROR);
+        attributes.addFlashAttribute("msgErro", "Token inválido!");
+        model.addAttribute(trocaSenha.getToken(), model);
+        return trocarSenha(null, model);
     }
 
 

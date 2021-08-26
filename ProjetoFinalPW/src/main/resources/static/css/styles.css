@@ -186,6 +186,10 @@ header .no-text-decor, header .no-text-decor:hover {
     height: 100%;
 }
 
+.height-half {
+    max-height: 50%;
+}
+
 .scroll-x {
     overflow-x: scroll;
 }
